@@ -1,0 +1,12 @@
+# --- Arquivos Sensíveis (Segurança) ---
+.env
+.env.*
+wallet/
+*.key
+*.pem
+
+*
+!target/*-runner
+!target/*-runner.jar
+!target/lib/*
+!target/quarkus-app/*
