@@ -4,6 +4,7 @@
 node_modules/
 .next
 /.pnp
+.vscode
 .pnp.*
 .yarn/*
 !.yarn/patches
