@@ -1,7 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules/
+.next
 /.pnp
 .pnp.*
 .yarn/*
@@ -36,6 +37,51 @@ yarn-error.log*
 # vercel
 .vercel
 
+.vscode
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+#Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+.flattened-pom.xml
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
+
+# IntelliJ
+.idea
+*.ipr
+*.iml
+*.iws
+
+# NetBeans
+nb-configuration.xml
+
+# Visual Studio Code
+.vscode
+.factorypath
+
+# OSX
+.DS_Store
+
+# Vim
+*.swp
+*.swo
+
+# patch
+*.orig
+*.rej
+
+# Local environment
+.env
+wallet/
+# Plugin directory /.quarkus/cli/plugins/ # TLS Certificates .certs/

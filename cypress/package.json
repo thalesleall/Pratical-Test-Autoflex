@@ -1,0 +1,25 @@
+{
+  "name": "autoflex-cypress-tests",
+  "version": "1.0.0",
+  "description": "Cypress E2E Tests Module for Autoflex Application",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test:backend": "cypress run --spec 'tests/backend/**/*.cy.js'",
+    "test:frontend": "cypress run --spec 'tests/frontend/**/*.cy.js'",
+    "test:integration": "cypress run --spec 'tests/integration/**/*.cy.js'",
+    "test:all": "cypress run",
+    "test:headless": "cypress run --headless"
+  },
+  "devDependencies": {
+    "cypress": "^13.6.2"
+  },
+  "keywords": [
+    "cypress",
+    "e2e",
+    "testing",
+    "autoflex"
+  ],
+  "author": "Autoflex Team",
+  "license": "MIT"
+}

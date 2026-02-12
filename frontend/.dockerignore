@@ -1,0 +1,28 @@
+# Dependências / build local
+node_modules
+dist
+build
+target
+
+# Variáveis sensíveis
+.env
+.env.*
+
+# Logs
+*.log
+
+# Git
+.git
+.gitignore
+
+# IDE / SO
+.vscode
+.idea
+*.swp
+.DS_Store
+Thumbs.db
+
+# Testes
+test
+tests
+__tests__
