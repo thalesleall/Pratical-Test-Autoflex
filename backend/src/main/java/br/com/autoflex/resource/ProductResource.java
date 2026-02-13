@@ -62,11 +62,13 @@ public class ProductResource {
 
     @DELETE
     @Operation(summary = "Delete a product by ID")
-    @APIResponse(responseCode = "204", description = "Product deleted successfully")
+    @APIResponse(responseCode = "200", description = "Product deleted successfully")
     @APIResponse(responseCode = "404", description = "Product not found")
     @Path("/{id}")
     public Response delete(@PathParam("id") Long id) {
         service.deleteProduct(id);
-        return Response.noContent().build();
+        return Response.ok()
+                .entity("{\"message\": \"Product deleted successfully\"}")
+                .build();
     }
 }

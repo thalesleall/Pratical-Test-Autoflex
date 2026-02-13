@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.CascadeType;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -18,6 +19,6 @@ public class Product extends PanacheEntity {
     @Column(precision = 10, scale = 2)
     public BigDecimal value;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     public List<CompositionProduct> composition = new ArrayList<>();
 }

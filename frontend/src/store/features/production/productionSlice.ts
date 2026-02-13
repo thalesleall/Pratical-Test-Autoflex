@@ -18,7 +18,15 @@ const initialState: ProductionState = {
 
 export const fetchProductionSuggestions = createAsyncThunk("production/fetchSuggestions", async () => {
   const result = await productionPlanningService.getSuggestion();
-  return result;
+
+  // Normaliza os dados da API para o formato esperado
+  return result.map((suggestion, index) => ({
+    productId: suggestion.productId ?? index + 1,
+    productName: suggestion.productName,
+    productValue: suggestion.productValue ?? suggestion.unitValue ?? 0,
+    maxProducibleQuantity: suggestion.maxProducibleQuantity ?? suggestion.producibleQuantity ?? 0,
+    estimatedRevenue: suggestion.estimatedRevenue ?? suggestion.totalValueEstimate ?? 0,
+  }));
 });
 
 const productionSlice = createSlice({

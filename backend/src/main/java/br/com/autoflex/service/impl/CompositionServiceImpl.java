@@ -9,8 +9,13 @@ import br.com.autoflex.repository.RawMaterialRepository;
 import br.com.autoflex.service.CompositionService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
+
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class CompositionServiceImpl implements CompositionService {
@@ -23,6 +28,18 @@ public class CompositionServiceImpl implements CompositionService {
     CompositionRepository compositionRepo;
     @Inject
     CompositionMapper mapper;
+    @Inject
+    EntityManager em;
+
+    @Override
+    public List<CompositionDTO> getCompositionsByProduct(Long productId) {
+        Product product = productRepo.findByIdOptional(productId)
+                .orElseThrow(() -> new NotFoundException("Product not found"));
+        
+        return product.composition.stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toList());
+    }
 
     @Override
     @Transactional
@@ -35,7 +52,8 @@ public class CompositionServiceImpl implements CompositionService {
 
         CompositionID id = new CompositionID(productId, rawMaterial.id);
         if (compositionRepo.findByIdOptional(id).isPresent()) {
-            throw new IllegalArgumentException("This raw material is already linked to this product. Use PUT to update.");
+            throw new IllegalArgumentException(
+                    "This raw material is already linked to this product. Use PUT to update.");
         }
 
         CompositionProduct composition = CompositionProduct.create(product, rawMaterial, dto.quantity());
@@ -50,7 +68,8 @@ public class CompositionServiceImpl implements CompositionService {
         CompositionID id = new CompositionID(productId, rawMaterialId);
 
         CompositionProduct composition = compositionRepo.findByIdOptional(id)
-                .orElseThrow(() -> new NotFoundException("Association not found between this product and raw material"));
+                .orElseThrow(
+                        () -> new NotFoundException("Association not found between this product and raw material"));
         composition.necessaryMaterial = dto.quantity();
 
         compositionRepo.persist(composition);
@@ -62,9 +81,17 @@ public class CompositionServiceImpl implements CompositionService {
     @Transactional
     public void removeComposition(Long productId, Long rawMaterialId) {
         CompositionID id = new CompositionID(productId, rawMaterialId);
-        boolean deleted = compositionRepo.deleteById(id);
-        if (!deleted) {
-            throw new NotFoundException("Association not found");
+
+        CompositionProduct composition = compositionRepo.findByIdOptional(id)
+                .orElseThrow(() -> new NotFoundException("Association not found"));
+
+        // Remove from product's composition list to maintain bidirectional relationship
+        if (composition.product != null && composition.product.composition != null) {
+            composition.product.composition.remove(composition);
         }
+
+        compositionRepo.delete(composition);
+        em.flush();
+        em.clear();
     }
 }

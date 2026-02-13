@@ -2,6 +2,7 @@ export interface ProductDTO {
   id?: number;
   name: string;
   value: number;
+  composition?: CompositionDTO[];
 }
 
 export interface RawMaterialDTO {
@@ -21,9 +22,12 @@ export interface ProductWithComposition extends ProductDTO {
 }
 
 export interface ProductionSuggestion {
-  productId: number;
+  productId?: number;
   productName: string;
-  productValue: number;
-  maxProducibleQuantity: number;
-  estimatedRevenue: number;
+  productValue?: number;
+  unitValue?: number; // Valor unitário do produto (alias para productValue)
+  maxProducibleQuantity?: number;
+  producibleQuantity?: number; // Quantidade produzível (alias para maxProducibleQuantity)
+  estimatedRevenue?: number;
+  totalValueEstimate?: number; // Estimativa de valor total (alias para estimatedRevenue)
 }

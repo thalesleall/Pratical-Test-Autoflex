@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public record ProductDTO(
         @Schema(readOnly = true, example = "1")
@@ -18,5 +19,8 @@ public record ProductDTO(
         @NotNull(message = "Value is required")
         @Positive(message = "Value must be positive")
         @Schema(description = "Unit selling price", example = "12.50", required = true)
-        BigDecimal value
+        BigDecimal value,
+
+        @Schema(readOnly = true, description = "List of raw materials used in this product")
+        List<CompositionDTO> composition
 ) {}

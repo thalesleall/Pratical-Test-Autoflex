@@ -5,7 +5,7 @@ import br.com.autoflex.model.CompositionProduct;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "cdi")
+@Mapper(componentModel = "jakarta")
 public interface CompositionMapper {
     @Mapping(source = "rawMaterial.id", target = "rawMaterialId")
     @Mapping(source = "rawMaterial.name", target = "rawMaterialName")
