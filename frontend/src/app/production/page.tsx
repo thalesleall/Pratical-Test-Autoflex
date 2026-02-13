@@ -60,12 +60,12 @@ export default function ProductionPage() {
                             </div>
                             <div className="bg-purple-50 px-3 py-2 rounded-lg border border-purple-200">
                               <span className="text-gray-600">Unit Price: </span>
-                              <span className="font-bold text-purple-600">${suggestion.productValue.toFixed(2)}</span>
+                              <span className="font-bold text-purple-600">${(suggestion.productValue ?? 0).toFixed(2)}</span>
                             </div>
                           </div>
                           <div className="mt-2 bg-gradient-to-r from-blue-50 to-slate-50 px-3 py-2 rounded-lg border border-blue-200">
                             <span className="text-gray-600 text-xs sm:text-sm">Max Revenue: </span>
-                            <span className="text-base sm:text-lg font-bold text-blue-900">${suggestion.estimatedRevenue.toFixed(2)}</span>
+                            <span className="text-base sm:text-lg font-bold text-blue-900">${(suggestion.estimatedRevenue ?? 0).toFixed(2)}</span>
                           </div>
                         </div>
                       </div>
@@ -109,7 +109,7 @@ export default function ProductionPage() {
                             </div>
                             <div className="text-right">
                               <p className="text-xs text-gray-600 mb-1">Est. Revenue</p>
-                              <p className="font-bold text-blue-900 text-lg sm:text-xl">${revenue.toFixed(2)}</p>
+                              <p className="font-bold text-blue-900 text-lg sm:text-xl">${(revenue ?? 0).toFixed(2)}</p>
                             </div>
                           </div>
                         </div>
@@ -140,7 +140,7 @@ export default function ProductionPage() {
                           <p className="font-semibold text-gray-900 text-sm truncate">{suggestion.productName}</p>
                           <div className="flex items-center justify-between mt-1">
                             <span className="text-xs text-gray-600">{quantity} units</span>
-                            <span className="text-sm font-bold text-blue-900">${(quantity * suggestion.productValue).toFixed(2)}</span>
+                            <span className="text-sm font-bold text-blue-900">${(quantity * (suggestion.productValue ?? 0)).toFixed(2)}</span>
                           </div>
                         </div>
                       );
@@ -156,7 +156,7 @@ export default function ProductionPage() {
                     <div className="bg-gradient-to-r from-blue-100 to-blue-200 p-4 rounded-xl mb-4">
                       <div className="flex items-center justify-between">
                         <span className="text-gray-700 font-semibold text-sm">Total Revenue:</span>
-                        <span className="text-2xl sm:text-3xl font-bold text-blue-900">${totalRevenue.toFixed(2)}</span>
+                        <span className="text-2xl sm:text-3xl font-bold text-blue-900">${(totalRevenue ?? 0).toFixed(2)}</span>
                       </div>
                     </div>
                     <Button variant="success" className="w-full" size="lg" disabled={totalRevenue === 0}>

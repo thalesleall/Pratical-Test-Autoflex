@@ -33,14 +33,26 @@ export default function CompositionsPage() {
   const handleAddComposition = async (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedProductId && selectedMaterialId) {
-      await dispatch(
-        addComposition({
-          productId: selectedProductId,
-          composition: { rawMaterialId: selectedMaterialId, quantity },
-        }),
-      );
-      setSelectedMaterialId(0);
-      setQuantity(1);
+      // Check if material is already in composition
+      const isDuplicate = compositions.some((comp) => comp.rawMaterialId === selectedMaterialId);
+      if (isDuplicate) {
+        const material = materials.find((m) => m.id === selectedMaterialId);
+        alert(`"${material?.name || "This material"}" is already in this recipe. Remove it first to change the quantity.`);
+        return;
+      }
+
+      try {
+        await dispatch(
+          addComposition({
+            productId: selectedProductId,
+            composition: { rawMaterialId: selectedMaterialId, quantity },
+          }),
+        ).unwrap();
+        setSelectedMaterialId(0);
+        setQuantity(1);
+      } catch (error: any) {
+        alert(error.message || "Failed to add material to recipe");
+      }
     }
   };
 
@@ -76,7 +88,7 @@ export default function CompositionsPage() {
                     style={{ animationDelay: `${idx * 50}ms` }}
                   >
                     <div className="font-semibold text-sm sm:text-base">{product.name}</div>
-                    <div className={`text-xs sm:text-sm mt-1 ${selectedProductId === product.id ? "opacity-90" : "opacity-60"}`}>${product.value.toFixed(2)}</div>
+                    <div className={`text-xs sm:text-sm mt-1 ${selectedProductId === product.id ? "opacity-90" : "opacity-60"}`}>${(product.value ?? 0).toFixed(2)}</div>
                   </button>
                 ))}
                 {products.length === 0 && <p className="text-gray-500 text-center py-8">No products available</p>}
@@ -88,30 +100,39 @@ export default function CompositionsPage() {
                 <>
                   <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">Recipe for {products.find((p) => p.id === selectedProductId)?.name}</h2>
 
-                  <form onSubmit={handleAddComposition} className="mb-6 p-4 sm:p-5 bg-gradient-to-br from-blue-50 to-slate-50 rounded-xl border border-blue-200">
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div className="sm:col-span-2">
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Material</label>
-                        <select
-                          value={selectedMaterialId}
-                          onChange={(e) => setSelectedMaterialId(parseInt(e.target.value))}
-                          className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-blue-900 outline-none bg-white hover:border-gray-400 transition-all"
-                          required
-                        >
-                          <option value={0}>Select a material</option>
-                          {materials.map((material) => (
-                            <option key={material.id} value={material.id}>
-                              {material.name} ({material.quantity} available)
-                            </option>
-                          ))}
-                        </select>
+                  {materials.filter((material) => !compositions.some((comp) => comp.rawMaterialId === material.id)).length > 0 ? (
+                    <form onSubmit={handleAddComposition} className="mb-6 p-4 sm:p-5 bg-gradient-to-br from-blue-50 to-slate-50 rounded-xl border border-blue-200">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="sm:col-span-2">
+                          <label className="block text-sm font-semibold text-gray-700 mb-2">Material</label>
+                          <select
+                            value={selectedMaterialId}
+                            onChange={(e) => setSelectedMaterialId(parseInt(e.target.value))}
+                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-blue-900 outline-none bg-white hover:border-gray-400 transition-all text-gray-900 font-normal"
+                            style={{ WebkitFontSmoothing: "antialiased", MozOsxFontSmoothing: "grayscale" } as React.CSSProperties}
+                            required
+                          >
+                            <option value={0}>Select a material</option>
+                            {materials
+                              .filter((material) => !compositions.some((comp) => comp.rawMaterialId === material.id))
+                              .map((material) => (
+                                <option key={material.id} value={material.id}>
+                                  {material.name} ({material.quantity} available)
+                                </option>
+                              ))}
+                          </select>
+                        </div>
+                        <Input label="Quantity" type="number" min="1" value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value))} required />
                       </div>
-                      <Input label="Quantity" type="number" min="1" value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value))} required />
+                      <Button type="submit" variant="success" className="mt-4 w-full">
+                        + Add Material
+                      </Button>
+                    </form>
+                  ) : (
+                    <div className="mb-6 p-4 sm:p-5 bg-gradient-to-br from-gray-50 to-slate-50 rounded-xl border border-gray-300 text-center">
+                      <p className="text-gray-600">All available materials have been added to this recipe.</p>
                     </div>
-                    <Button type="submit" variant="success" className="mt-4 w-full">
-                      + Add Material
-                    </Button>
-                  </form>
+                  )}
 
                   {loading ? (
                     <LoadingSpinner />

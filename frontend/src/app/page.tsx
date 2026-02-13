@@ -42,7 +42,7 @@ export default function Dashboard() {
                 <div>
                   <p className="text-xs sm:text-sm text-blue-900 font-semibold mb-1">Total Products</p>
                   <p className="text-3xl sm:text-4xl font-bold text-blue-900">{products.length}</p>
-                  <p className="text-xs text-blue-800 mt-2 font-medium">Value: ${totalProductValue.toFixed(2)}</p>
+                  <p className="text-xs text-blue-800 mt-2 font-medium">Value: ${(totalProductValue ?? 0).toFixed(2)}</p>
                 </div>
                 <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-900 rounded-2xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform">
                   <svg className="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,7 +117,7 @@ export default function Dashboard() {
                       style={{ animationDelay: `${idx * 100}ms` }}
                     >
                       <span className="font-semibold text-gray-900 text-sm sm:text-base truncate mr-2">{product.name}</span>
-                      <span className="text-xs sm:text-sm bg-blue-900 text-white px-2 sm:px-3 py-1 rounded-full font-bold whitespace-nowrap">${product.value.toFixed(2)}</span>
+                      <span className="text-xs sm:text-sm bg-blue-900 text-white px-2 sm:px-3 py-1 rounded-full font-bold whitespace-nowrap">${(product.value ?? 0).toFixed(2)}</span>
                     </div>
                   ))}
                   {products.length === 0 && (
@@ -147,11 +147,11 @@ export default function Dashboard() {
                     >
                       <div className="flex items-center justify-between mb-1">
                         <span className="font-semibold text-gray-900 text-sm sm:text-base truncate mr-2">{suggestion.productName}</span>
-                        <span className="text-xs sm:text-sm bg-blue-900 text-white px-2 sm:px-3 py-1 rounded-full font-bold whitespace-nowrap">${suggestion.estimatedRevenue.toFixed(2)}</span>
+                        <span className="text-xs sm:text-sm bg-blue-900 text-white px-2 sm:px-3 py-1 rounded-full font-bold whitespace-nowrap">${(suggestion.estimatedRevenue ?? 0).toFixed(2)}</span>
                       </div>
                       <div className="flex items-center gap-2 text-xs text-gray-600">
                         <span className="bg-white px-2 py-0.5 rounded-full">Max: {suggestion.maxProducibleQuantity} units</span>
-                        <span className="bg-white px-2 py-0.5 rounded-full">${suggestion.productValue}/unit</span>
+                        <span className="bg-white px-2 py-0.5 rounded-full">${(suggestion.productValue ?? 0).toFixed(2)}/unit</span>
                       </div>
                     </div>
                   ))}

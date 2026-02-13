@@ -62,8 +62,17 @@ const compositionsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || "Failed to fetch compositions";
       })
+      .addCase(addComposition.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(addComposition.fulfilled, (state, action) => {
+        state.loading = false;
         state.compositions = action.payload;
+      })
+      .addCase(addComposition.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Failed to add composition";
       })
       .addCase(updateComposition.fulfilled, (state, action) => {
         state.compositions = action.payload;

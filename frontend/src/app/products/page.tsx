@@ -77,7 +77,7 @@ export default function ProductsPage() {
                     <div className="flex-1">
                       <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 truncate">{product.name}</h3>
                       <div className="flex items-center gap-2">
-                        <span className="text-2xl sm:text-3xl text-blue-900 font-bold">${product.value.toFixed(2)}</span>
+                        <span className="text-2xl sm:text-3xl text-blue-900 font-bold">${(product.value ?? 0).toFixed(2)}</span>
                       </div>
                     </div>
                     <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-blue-900 to-blue-950 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform flex-shrink-0">
