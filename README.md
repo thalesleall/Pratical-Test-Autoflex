@@ -97,19 +97,15 @@ A dedicated endpoint is responsible for calculating which products can be manufa
 
 Endpoint: `GET /production/suggestion`.
 
-- Logica RF004
-    1. **Ordenação:** Pegamos todos os produtos e ordenamos pelo value (Decrescente). O mais caro vem primeiro.
-    2. **Snapshot do Estoque:** Carregamos todo o estoque de Matéria-Prima na memória (em um Map/Dicionário).
-    3. **Iteração e Simulação:**
-        - Pegamos o produto nº 1 (o mais caro).
-        - Olhamos a receita dele: "Preciso de 2kg de Aço e 10 parafusos".
-        - Olhamos o estoque virtual: "Tenho 100kg de Aço e 500 parafusos".
-        - Calculamos o **Gargalo**: Qual ingrediente acaba primeiro?
-            - Aço: 100 / 2 = 50 unidades possíveis.
-            - Parafusos: 500 / 10 = 50 unidades possíveis.
-            - Total fabricável: 50 unidades.
-        - **O Pulo do Gato:** "Fabricamos" virtualmente essas 50 unidades. Subtraímos os materiais usados do nosso estoque em memória.
-        - Vamos para o produto nº 2 e repetimos o processo com o **estoque restante**.
+- RF004 Logic
+  1. Create an in-memory snapshot representing all raw material stock stored in the database.
+  2. Retrieve the list of products ordered from highest to lowest value.
+  3. For each product:
+     3.1 Determine the maximum quantity that can be produced based on the remaining in-memory stock.
+     3.2 If at least one unit can be produced:
+     3.3 Add the product and its producible quantity to the suggestion list.
+     3.4 Deduct the consumed raw materials from the in-memory stock to ensure subsequent products do not reuse already allocated resources.
+  4. Return the final list of producible products, maximizing the total stock value.
 
 Through this mapping, the API design ensures full compliance with the defined functional requirements while keeping business rules centralized and the system architecture well-structured.
 
