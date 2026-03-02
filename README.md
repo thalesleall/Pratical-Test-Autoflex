@@ -179,3 +179,96 @@ This project was developed as a practical test for Autoflex, aiming to demonstra
 Although my main professional experience is focused on Node.js, TypeScript, and NestJS, this project was intentionally developed using Quarkus and the Java ecosystem, both to align with Autoflex's technology stack and to demonstrate adaptability to different environments and technologies. The Front-end migration to Vue.js also showcases the flexibility of the API-based architecture, allowing a seamless swap of front-end frameworks without backend impacts.
 
 Before implementation, a detailed technical documentation and architectural planning phase was conducted. This approach streamlined the development process and ensured consistency across database modeling, API design, and business rules implementation.
+
+---
+
+## How to Run Locally
+
+### Prerequisites
+
+- **Node.js** >= 20.x
+- **npm** >= 10.x
+- **Docker** (optional, for containerized execution)
+
+---
+
+### Back-end (Quarkus + Oracle)
+
+> **Important:** The back-end cannot be run locally without the Oracle Autonomous Database wallet and credentials. The database is hosted on Oracle Cloud Infrastructure and requires a valid wallet (mTLS) and environment variables (`DBUSERNAME`, `DBPASSWD`, `JDBCURL`) to establish a connection. Without these, the application will not start.
+>
+> The API is currently deployed and accessible at its production URL for testing purposes.
+
+If you have the wallet and credentials, configure the environment variables and run:
+
+```bash
+cd backend
+./mvnw quarkus:dev
+```
+
+---
+
+### Front-end — Next.js
+
+```bash
+cd frontend
+npm install
+```
+
+Create a `.env.local` file:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=https://autoflexapi.thalesleal.icu
+```
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+Access at: http://localhost:3000
+
+---
+
+### Front-end — Vue.js
+
+```bash
+cd frontend-vue
+npm install
+```
+
+Create a `.env` file:
+
+```env
+VITE_API_BASE_URL=https://autoflexapi.thalesleal.icu
+```
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+Access at: http://localhost:5173
+
+---
+
+### Docker (Vue.js)
+
+```bash
+cd frontend-vue
+docker build -t autoflex-app-vue .
+docker run -d -p 3000:3000 autoflex-app-vue
+```
+
+Access at: http://localhost:3000
+
+---
+
+### Running Cypress Tests
+
+```bash
+cd cypress
+npm install
+npx cypress open
+```

@@ -1,115 +1,149 @@
-describe("Frontend - Navigation", () => {
+describe("Frontend Vue - Navigation", () => {
   beforeEach(() => {
     cy.on("uncaught:exception", () => false);
-    cy.visit("/");
   });
 
-  describe("Home Page", () => {
-    it("should load the home page", () => {
+  describe("Dashboard (Home)", () => {
+    it("should load the dashboard at /", () => {
+      cy.visit("/");
       cy.url().should("eq", Cypress.config().baseUrl + "/");
-      cy.get("body").should("be.visible");
     });
 
-    it("should display navbar with navigation links", () => {
-      cy.get("nav").should("be.visible");
+    it("should display the Autoflex title in the navbar", () => {
+      cy.visit("/");
+      cy.get("nav").contains("Autoflex").should("be.visible");
+    });
+
+    it("should display the Dashboard heading", () => {
+      cy.visit("/");
+      cy.get("h1").contains("Dashboard").should("be.visible");
+    });
+
+    it("should show overview cards on the dashboard", () => {
+      cy.visit("/");
+      cy.contains("Total Products").should("be.visible");
+      cy.contains("Raw Materials").should("be.visible");
     });
   });
 
-  describe("Navigation - Products", () => {
-    it("should navigate to products page", () => {
-      cy.visit("/products");
+  describe("Navbar Link Navigation", () => {
+    beforeEach(() => {
+      cy.visit("/");
+    });
+
+    it("should navigate to Products page via navbar", () => {
+      cy.get("nav a").contains("Products").click();
       cy.url().should("include", "/products");
+      cy.get("h1").contains("Products").should("be.visible");
     });
 
-    it("should display products page content", () => {
-      cy.visit("/products");
-      cy.get("body").should("be.visible");
-    });
-  });
-
-  describe("Navigation - Raw Materials", () => {
-    it("should navigate to raw materials page", () => {
-      cy.visit("/materials");
+    it("should navigate to Materials page via navbar", () => {
+      cy.get("nav a").contains("Materials").click();
       cy.url().should("include", "/materials");
+      cy.get("h1").contains("Raw Materials").should("be.visible");
     });
 
-    it("should display raw materials page content", () => {
-      cy.visit("/materials");
-      cy.get("body").should("be.visible");
-    });
-  });
-
-  describe("Navigation - Composition", () => {
-    it("should navigate to composition page", () => {
-      cy.visit("/compositions");
+    it("should navigate to Recipes page via navbar", () => {
+      cy.get("nav a").contains("Recipes").click();
       cy.url().should("include", "/compositions");
+      cy.get("h1").contains("Product Recipes").should("be.visible");
     });
 
-    it("should display composition page content", () => {
-      cy.visit("/compositions");
-      cy.get("body").should("be.visible");
-    });
-  });
-
-  describe("Navigation - Production", () => {
-    it("should navigate to production page", () => {
-      cy.visit("/production");
+    it("should navigate to Production page via navbar", () => {
+      cy.get("nav a").contains("Production").click();
       cy.url().should("include", "/production");
+      cy.get("h1").contains("Production Suggestions").should("be.visible");
     });
 
-    it("should display production page content", () => {
-      cy.visit("/production");
-      cy.get("body").should("be.visible");
-    });
-  });
-
-  describe("Navigation Links", () => {
-    it("should have clickable links in navbar", () => {
-      cy.get("nav a, nav button").should("have.length.at.least", 3);
-    });
-
-    it("should navigate between pages using navbar", () => {
-      cy.get("nav")
-        .contains(/produtos|products/i)
-        .click();
-      cy.wait(500);
+    it("should navigate back to Dashboard from another page", () => {
+      cy.get("nav a").contains("Products").click();
       cy.url().should("include", "/products");
+      cy.get("nav a").contains("Dashboard").click();
+      cy.url().should("eq", Cypress.config().baseUrl + "/");
+      cy.get("h1").contains("Dashboard").should("be.visible");
+    });
 
-      cy.get("nav")
-        .contains(/matérias|materials/i)
-        .click();
-      cy.wait(500);
-      cy.url().should("include", "/materials");
+    it("should have all 5 links in the navbar", () => {
+      cy.get("nav a").should("have.length.at.least", 5);
     });
   });
 
-  describe("Responsiveness", () => {
-    const viewports = [
-      { name: "Mobile", width: 375, height: 667 },
-      { name: "Tablet", width: 768, height: 1024 },
-      { name: "Desktop", width: 1920, height: 1080 },
-    ];
+  describe("Direct Route Access", () => {
+    it("should load /products directly", () => {
+      cy.visit("/products");
+      cy.get("h1").contains("Products").should("be.visible");
+      cy.contains("Manage your product catalog").should("be.visible");
+    });
 
-    viewports.forEach((viewport) => {
-      it(`should be responsive on ${viewport.name}`, () => {
-        cy.viewport(viewport.width, viewport.height);
-        cy.visit("/");
-        cy.get("body").should("be.visible");
-        cy.get("nav").should("be.visible");
-      });
+    it("should load /materials directly", () => {
+      cy.visit("/materials");
+      cy.get("h1").contains("Raw Materials").should("be.visible");
+      cy.contains("Manage your inventory").should("be.visible");
+    });
+
+    it("should load /compositions directly", () => {
+      cy.visit("/compositions");
+      cy.get("h1").contains("Product Recipes").should("be.visible");
+      cy.contains("Define which materials are needed").should("be.visible");
+    });
+
+    it("should load /production directly", () => {
+      cy.visit("/production");
+      cy.get("h1").contains("Production Suggestions").should("be.visible");
+      cy.contains("Smart Algorithm Active").should("be.visible");
     });
   });
 
-  describe("UI Elements", () => {
-    it("should have correct meta tags", () => {
-      cy.visit("/");
-      cy.document().its("head").find('meta[name="viewport"]').should("exist");
+  describe("Active Link Highlight", () => {
+    it("should highlight Products link when on /products", () => {
+      cy.visit("/products");
+      cy.get("nav a")
+        .contains("Products")
+        .should("have.class", "bg-white")
+        .and("have.class", "text-blue-900");
     });
 
-    it("should render page structure", () => {
+    it("should highlight Dashboard link when on /", () => {
       cy.visit("/");
-      cy.get("body").should("be.visible");
-      cy.get("nav").should("exist");
+      cy.get("nav a")
+        .contains("Dashboard")
+        .should("have.class", "bg-white")
+        .and("have.class", "text-blue-900");
+    });
+  });
+
+  describe("Responsive Navigation", () => {
+    it("should show full nav links on desktop (1280px)", () => {
+      cy.viewport(1280, 720);
+      cy.visit("/");
+      cy.get("nav").should("be.visible");
+      cy.get("nav a").contains("Products").should("be.visible");
+      cy.get("nav a").contains("Materials").should("be.visible");
+      cy.get("nav a").contains("Recipes").should("be.visible");
+      cy.get("nav a").contains("Production").should("be.visible");
+    });
+
+    it("should show hamburger menu on mobile (375px)", () => {
+      cy.viewport(375, 667);
+      cy.visit("/");
+      cy.get("nav").should("be.visible");
+      // Hamburger button visible on mobile
+      cy.get("nav button").should("be.visible");
+    });
+
+    it("should open mobile menu and navigate to Products", () => {
+      cy.viewport(375, 667);
+      cy.visit("/");
+      cy.get("nav button").click();
+      cy.get("nav a").contains("Products").should("be.visible").click();
+      cy.url().should("include", "/products");
+      cy.get("h1").contains("Products").should("be.visible");
+    });
+
+    it("should be responsive on tablet (768px)", () => {
+      cy.viewport(768, 1024);
+      cy.visit("/");
+      cy.get("nav").should("be.visible");
     });
   });
 });
