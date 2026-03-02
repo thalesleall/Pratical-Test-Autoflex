@@ -20,6 +20,14 @@ public class ProductCompositionResource {
     @Inject
     CompositionService service;
 
+    @GET
+    @Operation(summary = "Get product composition", description = "Retrieves all raw materials associated with a product.")
+    @APIResponse(responseCode = "200", description = "Composition retrieved successfully")
+    @APIResponse(responseCode = "404", description = "Product not found")
+    public Response getComposition(@PathParam("productId") Long productId) {
+        return Response.ok(service.getCompositionsByProduct(productId)).build();
+    }
+
     @POST
     @Operation(summary = "Add raw material to product", description = "Links a raw material to a product with a specific quantity.")
     @APIResponse(responseCode = "201", description = "Association created successfully")
@@ -46,13 +54,15 @@ public class ProductCompositionResource {
     @DELETE
     @Path("/{rawMaterialId}")
     @Operation(summary = "Remove raw material from product", description = "Deletes the association between the product and the raw material.")
-    @APIResponse(responseCode = "204", description = "Association removed successfully")
+    @APIResponse(responseCode = "200", description = "Association removed successfully")
     @APIResponse(responseCode = "404", description = "Association not found")
     public Response delete(
             @PathParam("productId") Long productId,
             @PathParam("rawMaterialId") Long rawMaterialId) {
 
         service.removeComposition(productId, rawMaterialId);
-        return Response.noContent().build();
+        return Response.ok()
+                .entity("{\"message\": \"Association removed successfully\"}")
+                .build();
     }
 }

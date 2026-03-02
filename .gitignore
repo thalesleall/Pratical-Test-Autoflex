@@ -7,6 +7,7 @@ node_modules/
 .vscode
 .pnp.*
 .yarn/*
+.env
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
@@ -33,7 +34,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+backend/.env
 
 # vercel
 .vercel
@@ -83,6 +84,6 @@ nb-configuration.xml
 *.rej
 
 # Local environment
-.env
+backend/.env
 wallet/
 # Plugin directory /.quarkus/cli/plugins/ # TLS Certificates .certs/

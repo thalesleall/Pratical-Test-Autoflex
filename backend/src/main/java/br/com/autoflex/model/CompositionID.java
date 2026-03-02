@@ -15,21 +15,27 @@ public class CompositionID implements Serializable {
     @Column(name = "id_raw_material")
     public Long rawMaterialId;
 
-    public CompositionID() {}
+    public CompositionID() {
+    }
+
     public CompositionID(Long productId, Long rawMaterialId) {
         this.productId = productId;
         this.rawMaterialId = rawMaterialId;
     }
+
     @Override
-    public boolean equals(Object o){
-        if (this == o) return true;
-        if(!(o instanceof CompositionID)) return false;
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof CompositionID))
+            return false;
         CompositionID that = (CompositionID) o;
-        return Objects.equals(productId, that.rawMaterialId) &&
+        return Objects.equals(productId, that.productId) &&
                 Objects.equals(rawMaterialId, that.rawMaterialId);
     }
+
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return Objects.hash(productId, rawMaterialId);
     }
 }

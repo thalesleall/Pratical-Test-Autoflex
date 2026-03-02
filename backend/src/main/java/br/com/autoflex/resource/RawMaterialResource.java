@@ -61,10 +61,12 @@ public class RawMaterialResource {
     @DELETE
     @Path("/{id}")
     @Operation(summary = "Delete raw material")
-    @APIResponse(responseCode = "204", description = "Deleted successfully")
+    @APIResponse(responseCode = "200", description = "Deleted successfully")
     @APIResponse(responseCode = "404", description = "Raw material not found")
     public Response delete(@PathParam("id") Long id) {
         service.delete(id);
-        return Response.noContent().build();
+        return Response.ok()
+                .entity("{\"message\": \"Raw material deleted successfully\"}")
+                .build();
     }
 }
