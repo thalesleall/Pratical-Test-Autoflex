@@ -50,9 +50,7 @@ describe("Frontend Vue - Compositions (Product Recipes)", () => {
         if (response.body.length > 0) {
           cy.visit("/compositions");
           cy.contains(response.body[0].name).click();
-          cy.contains(response.body[0].name)
-            .closest("button")
-            .should("have.class", "text-white");
+          cy.contains(response.body[0].name).closest("button").should("have.class", "text-white");
         }
       });
     });
@@ -114,12 +112,10 @@ describe("Frontend Vue - Compositions (Product Recipes)", () => {
       cy.request("GET", `${apiUrl}/products`).then((response) => {
         if (response.body.length > 0) {
           const productId = response.body[0].id;
-          cy.request("GET", `${apiUrl}/products/${productId}/raw-materials`).then(
-            (compResponse) => {
-              expect(compResponse.status).to.eq(200);
-              expect(compResponse.body).to.be.an("array");
-            }
-          );
+          cy.request("GET", `${apiUrl}/products/${productId}/raw-materials`).then((compResponse) => {
+            expect(compResponse.status).to.eq(200);
+            expect(compResponse.body).to.be.an("array");
+          });
         }
       });
     });
@@ -153,15 +149,13 @@ describe("Frontend Vue - Compositions (Product Recipes)", () => {
       cy.request("GET", `${apiUrl}/products`).then((response) => {
         if (response.body.length > 0) {
           const productId = response.body[0].id;
-          cy.request("GET", `${apiUrl}/products/${productId}/raw-materials`).then(
-            (compResponse) => {
-              if (compResponse.body.length > 0) {
-                cy.visit("/compositions");
-                cy.contains(response.body[0].name).click();
-                cy.contains("Remove").should("be.visible");
-              }
+          cy.request("GET", `${apiUrl}/products/${productId}/raw-materials`).then((compResponse) => {
+            if (compResponse.body.length > 0) {
+              cy.visit("/compositions");
+              cy.contains(response.body[0].name).click();
+              cy.contains("Remove").should("be.visible");
             }
-          );
+          });
         }
       });
     });

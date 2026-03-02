@@ -143,10 +143,12 @@ describe("Frontend Vue - Production Suggestions", () => {
 
     it("should be a purely read-only view", () => {
       cy.visit("/production");
-      cy.get("button").filter((_, el) => {
-        const text = el.textContent.toLowerCase();
-        return text.includes("start") || text.includes("produce") || text.includes("submit");
-      }).should("have.length", 0);
+      cy.get("button")
+        .filter((_, el) => {
+          const text = el.textContent.toLowerCase();
+          return text.includes("start") || text.includes("produce") || text.includes("submit");
+        })
+        .should("have.length", 0);
     });
   });
 });
